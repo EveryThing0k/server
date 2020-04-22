@@ -6,7 +6,7 @@ const Schema = use("Schema");
 class EmployeeSchema extends Schema {
   up() {
     this.create("employees", (table) => {
-      table.integer("level");
+      table.integer("level").defaultTo(1);
       table
         .integer("physical_user_id")
         .unsigned()
@@ -23,7 +23,8 @@ class EmployeeSchema extends Schema {
         .inTable("positions")
         .onUpdate("CASCADE")
         .onDelete("CASCADE")
-        .notNullable();
+        .notNullable()
+        .defaultTo(1);
       table.timestamps();
     });
   }

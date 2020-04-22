@@ -8,7 +8,7 @@ class PositionSchema extends Schema {
     this.create("positions", (table) => {
       table.increments();
       table.string("name").notNullable();
-      table.integer("access_level").notNullable();
+      table.integer("access_level").notNullable().defaultTo(0);
       table.string("description").notNullable();
       table.timestamps();
     });

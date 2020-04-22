@@ -17,6 +17,7 @@ class PhysicalSchema extends Schema {
         .notNullable()
         .primary();
       table.timestamps();
+      table.primary(["user_id"]);
     });
   }
 
