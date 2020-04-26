@@ -10,11 +10,11 @@ class ProjectSchema extends Schema {
       table
         .integer("activity_content_id")
         .unsigned()
+        .notNullable()
         .references("content_id")
         .inTable("activities")
         .onUpdate("CASCADE")
         .onDelete("CASCADE")
-        .notNullable()
         .unique();
       table.timestamps();
     });

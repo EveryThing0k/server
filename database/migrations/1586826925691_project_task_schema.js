@@ -6,26 +6,23 @@ const Schema = use("Schema");
 class ProjectTaskSchema extends Schema {
   up() {
     this.create("project_tasks", (table) => {
+      table.increments();
       table
         .integer("project_activity_content_id")
-        .unsigned()
         .references("activity_content_id")
         .inTable("projects")
         .onUpdate("CASCADE")
-        .onDelete("RESTRICT")
+        .onDelete("CASCADE")
         .notNullable();
       table
         .integer("task_activity_content_id")
-        .unsigned()
         .references("activity_content_id")
         .inTable("tasks")
         .onUpdate("CASCADE")
-        .onDelete("SET NULL")
-        .notNullable();
-      table.primary([
-        "project_activity_content_id",
-        "task_activity_content_id",
-      ]);
+        .onDelete("CASCADE")
+        .notNullable()
+        .unique();
+
       table.timestamps();
     });
   }
