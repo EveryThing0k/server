@@ -20,3 +20,4 @@ const Route = use("Route");
 
 Route.post("/users/cpf", "UserCPFController.create");
 Route.post("/users/cnpj", "UserCNPJController.create");
+Route.post("/sessions", "SessionController.store");
