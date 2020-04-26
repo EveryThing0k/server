@@ -3,6 +3,7 @@ const User = use("App/Models/User");
 const Physical = use("App/Models/Physical");
 const Employee = use("App/Models/Employee");
 const Position = use("App/Models/Position");
+const Database = use("Database");
 
 class UserCPFController {
   async create({ request, response }) {
@@ -12,6 +13,7 @@ class UserCPFController {
       "password",
       "cpf",
     ]);
+    const trx = await Database.beginTransaction();
 
     // Check if the email already exists
 
@@ -21,7 +23,7 @@ class UserCPFController {
       return response.status(401).send({ error: "E-mail already exists" });
     }
 
-    const user = await User.create({ name, email, password });
+    const user = await User.create({ name, email, password }, trx);
 
     // Check if the position default already created
     const positionExists = await Position.first();
@@ -32,13 +34,17 @@ class UserCPFController {
     }
 
     // Create Physical
-    await Physical.create({ cpf, user_id: user.id });
+    await Physical.create({ cpf, user_id: user.id }, trx);
 
     /// Create Employee
-    await Employee.create({
-      physical_user_id: user.id,
-    });
+    await Employee.create(
+      {
+        physical_user_id: user.id,
+      },
+      trx
+    );
 
+    await trx.commit();
     return user;
   }
 }

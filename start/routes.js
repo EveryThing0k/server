@@ -19,3 +19,4 @@ const Route = use("Route");
 /**Routes Storege**/
 
 Route.post("/users/cpf", "UserCPFController.create");
+Route.post("/users/cnpj", "UserCNPJController.create");

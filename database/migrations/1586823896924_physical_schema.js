@@ -6,6 +6,7 @@ const Schema = use("Schema");
 class PhysicalSchema extends Schema {
   up() {
     this.create("physicals", (table) => {
+      table.increments();
       table.string("cpf");
       table
         .integer("user_id")
@@ -15,9 +16,8 @@ class PhysicalSchema extends Schema {
         .onUpdate("CASCADE")
         .onDelete("CASCADE")
         .notNullable()
-        .primary();
+        .unique();
       table.timestamps();
-      table.primary(["user_id"]);
     });
   }
 

@@ -6,6 +6,7 @@ const Schema = use("Schema");
 class LegalSchema extends Schema {
   up() {
     this.create("legals", (table) => {
+      table.increments();
       table.string("cnpj").notNullable().unique();
       table
         .integer("user_id")
@@ -15,7 +16,7 @@ class LegalSchema extends Schema {
         .onUpdate("CASCADE")
         .onDelete("CASCADE")
         .notNullable()
-        .primary();
+        .unique();
       table.timestamps();
     });
   }

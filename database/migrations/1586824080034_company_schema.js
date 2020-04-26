@@ -6,6 +6,7 @@ const Schema = use("Schema");
 class CompanySchema extends Schema {
   up() {
     this.create("companies", (table) => {
+      table.increments();
       table.string("fantasy_name");
       table
         .integer("legal_user_id")
@@ -15,7 +16,7 @@ class CompanySchema extends Schema {
         .onUpdate("CASCADE")
         .onDelete("CASCADE")
         .notNullable()
-        .primary();
+        .unique();
       table
         .integer("address_id")
         .unsigned()
