@@ -17,14 +17,6 @@ class TaskSchema extends Schema {
         .notNullable()
         .unique();
       table
-        .integer("status_id")
-        .unsigned()
-        .references("id")
-        .inTable("status")
-        .onUpdate("CASCADE")
-        .onUpdate("CASCADE")
-        .notNullable();
-      table
         .integer("type_id")
         .unsigned()
         .references("id")

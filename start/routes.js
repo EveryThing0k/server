@@ -25,4 +25,5 @@ Route.post("/sessions", "SessionController.create");
 // With auth
 Route.group(() => {
   Route.post("/projects", "ProjectController.create").middleware(["company"]);
+  Route.post("/tasks", "TaskController.create").middleware(["company"]);
 }).middleware(["auth"]);

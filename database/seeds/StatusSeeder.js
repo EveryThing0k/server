@@ -1,12 +1,19 @@
 "use strict";
 
 const Status = use("App/Models/Status");
+const Database = use("Database");
 
 class StatusSeeder {
   async run() {
-    return Status.create({
-      name: "Created",
-    });
+    const trx = await Database.beginTransaction();
+    const status = await Status.create(
+      {
+        name: "Created",
+      },
+      trx
+    );
+    await trx.commit();
+    return status;
   }
 }
 

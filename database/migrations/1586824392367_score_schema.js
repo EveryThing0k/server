@@ -6,6 +6,7 @@ const Schema = use("Schema");
 class ScoreSchema extends Schema {
   up() {
     this.create("scores", (table) => {
+      table.increments();
       table.integer("value");
       table
         .integer("content_id")
@@ -15,7 +16,7 @@ class ScoreSchema extends Schema {
         .onUpdate("CASCADE")
         .onDelete("CASCADE")
         .notNullable()
-        .primary();
+        .unique();
       table.timestamps();
     });
   }
