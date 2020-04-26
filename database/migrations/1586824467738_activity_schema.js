@@ -6,8 +6,8 @@ const Schema = use("Schema");
 class ActivitySchema extends Schema {
   up() {
     this.create("activities", (table) => {
-      table.string("title");
-      table.datetime("data_entry");
+      table.increments();
+      table.string("title").notNullable();
       table.datetime("data_end");
       table
         .integer("content_id")
@@ -17,7 +17,7 @@ class ActivitySchema extends Schema {
         .onUpdate("CASCADE")
         .onDelete("CASCADE")
         .notNullable()
-        .primary();
+        .unique();
       table
         .integer("status_id")
         .unsigned()

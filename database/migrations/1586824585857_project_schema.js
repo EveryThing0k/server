@@ -6,6 +6,7 @@ const Schema = use("Schema");
 class ProjectSchema extends Schema {
   up() {
     this.create("projects", (table) => {
+      table.increments();
       table
         .integer("activity_content_id")
         .unsigned()
@@ -14,7 +15,7 @@ class ProjectSchema extends Schema {
         .onUpdate("CASCADE")
         .onDelete("CASCADE")
         .notNullable()
-        .primary();
+        .unique();
       table.timestamps();
     });
   }
