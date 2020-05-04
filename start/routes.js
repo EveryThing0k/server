@@ -16,7 +16,11 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use("Route");
 
-/**Routes Storege**/
+Route.get("/", ({ response }) => {
+  return response.send({ status: true });
+});
+
+/**Routes Storage**/
 
 Route.post("/users/cpf", "UserCPFController.create");
 Route.post("/users/cnpj", "UserCNPJController.create");

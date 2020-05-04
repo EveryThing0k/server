@@ -55,14 +55,13 @@ class TaskController {
     );
 
     // Create Project Task
-    /*
     await ProjectTask.create(
       {
         project_activity_content_id: project_content_id,
         task_activity_content_id: content.id,
       },
       trx
-    );*/
+    );
 
     // Create Employee Tasks
 
@@ -75,7 +74,7 @@ class TaskController {
 
     await trx.commit();
     return task;
-
+  }
 }
 
 module.exports = TaskController;
