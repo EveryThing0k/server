@@ -1,2 +1,2 @@
-release: ENV_SILENT=true yarn adonis migration:run --force && adonis seed
+release: ENV_SILENT=true yarn adonis migration:run --force
 web: ENV_SILENT=true yarn adonis serve
