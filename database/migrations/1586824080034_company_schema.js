@@ -7,7 +7,7 @@ class CompanySchema extends Schema {
   up() {
     this.create("companies", (table) => {
       table.increments();
-      table.string("fantasy_name");
+      table.string("fantasy_name").notNullable();
       table
         .integer("legal_user_id")
         .unsigned()

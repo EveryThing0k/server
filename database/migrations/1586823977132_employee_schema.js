@@ -7,7 +7,7 @@ class EmployeeSchema extends Schema {
   up() {
     this.create("employees", (table) => {
       table.increments();
-      table.integer("exp").defaultTo(1);
+      table.decimal("exp").defaultTo(1).notNullable();
       table
         .integer("physical_user_id")
         .unsigned()
