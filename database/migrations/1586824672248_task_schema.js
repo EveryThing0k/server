@@ -8,30 +8,26 @@ class TaskSchema extends Schema {
     this.create("tasks", (table) => {
       table.increments();
       table
-        .integer("activity_content_id")
+        .integer("activity_id")
         .unsigned()
-        .references("content_id")
+        .references("id")
         .inTable("activities")
         .onUpdate("CASCADE")
         .onDelete("CASCADE")
         .notNullable()
         .unique();
       table
-        .integer("type_id")
+        .integer("status_id")
         .unsigned()
         .references("id")
-        .inTable("types")
+        .inTable("statuses")
         .onUpdate("CASCADE")
         .onDelete("CASCADE")
-        .notNullable();
-      table
-        .integer("score_content_id")
-        .unsigned()
-        .references("content_id")
-        .inTable("scores")
-        .onUpdate("CASCADE")
-        .onDelete("CASCADE")
-        .notNullable();
+        .notNullable()
+        .unique();
+      table.integer("value");
+      table.datetime("data_end");
+      //Data entry created from command timestamps, named created_at
       table.timestamps();
     });
   }

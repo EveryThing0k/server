@@ -15,14 +15,14 @@ class ProjectCompanySchema extends Schema {
         .onDelete("RESTRICT")
         .notNullable();
       table
-        .integer("project_activity_content_id")
+        .integer("project_activity_id")
         .unsigned()
-        .references("activity_content_id")
+        .references("activity_id")
         .inTable("projects")
         .onUpdate("CASCADE")
         .onDelete("SET NULL")
         .notNullable();
-      table.primary(["company_legal_user_id", "project_activity_content_id"]);
+      table.primary(["company_legal_user_id", "project_activity_id"]);
       table.timestamps();
     });
   }

@@ -7,7 +7,7 @@ class EmployeeSchema extends Schema {
   up() {
     this.create("employees", (table) => {
       table.increments();
-      table.integer("level").defaultTo(1);
+      table.integer("exp").defaultTo(1);
       table
         .integer("physical_user_id")
         .unsigned()
@@ -16,16 +16,7 @@ class EmployeeSchema extends Schema {
         .onUpdate("CASCADE")
         .onDelete("CASCADE")
         .notNullable()
-        .unique();
-      table
-        .integer("position_id")
-        .unsigned()
-        .references("id")
-        .inTable("positions")
-        .onUpdate("CASCADE")
-        .onDelete("CASCADE")
-        .notNullable()
-        .defaultTo(1);
+        .unique();     
       table.timestamps();
     });
   }

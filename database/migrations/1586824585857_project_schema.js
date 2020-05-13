@@ -8,10 +8,10 @@ class ProjectSchema extends Schema {
     this.create("projects", (table) => {
       table.increments();
       table
-        .integer("activity_content_id")
+        .integer("activity_id")
         .unsigned()
         .notNullable()
-        .references("content_id")
+        .references("id")
         .inTable("activities")
         .onUpdate("CASCADE")
         .onDelete("CASCADE")

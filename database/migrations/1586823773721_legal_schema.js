@@ -18,6 +18,7 @@ class LegalSchema extends Schema {
         .notNullable()
         .unique();
       table.timestamps();
+      
     });
   }
 

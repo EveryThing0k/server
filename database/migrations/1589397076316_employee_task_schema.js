@@ -1,35 +1,35 @@
-"use strict";
+'use strict'
 
 /** @type {import('@adonisjs/lucid/src/Schema')} */
-const Schema = use("Schema");
+const Schema = use('Schema')
 
 class EmployeeTaskSchema extends Schema {
-  up() {
-    this.create("employee_tasks", (table) => {
-      table.increments();
+  up () {
+    this.create('employee_tasks', (table) => {
       table
         .integer("employee_physical_user_id")
         .unsigned()
         .references("physical_user_id")
         .inTable("employees")
         .onUpdate("CASCADE")
-        .onDelete("RESTRICT")
+        .onDelete("CASCADE")
         .notNullable();
       table
-        .integer("task_activity_content_id")
+        .integer("task_activity_id")
         .unsigned()
-        .references("activity_content_id")
+        .references("activity_id")
         .inTable("tasks")
         .onUpdate("CASCADE")
-        .onDelete("SET NULL")
+        .onDelete("CASCADE")
         .notNullable();
+      table.primary(["employee_physical_user_id", "task_activity_id"]); 
       table.timestamps();
-    });
+    })
   }
 
-  down() {
-    this.drop("employee_tasks");
+  down () {
+    this.drop('employee_tasks')
   }
 }
 
-module.exports = EmployeeTaskSchema;
+module.exports = EmployeeTaskSchema
