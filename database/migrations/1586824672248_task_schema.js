@@ -7,7 +7,7 @@ class TaskSchema extends Schema {
   up() {
     this.create("tasks", (table) => {
       table
-        .integer("activity_id")
+        .integer("id")
         .unsigned()
         .references("id")
         .inTable("activities")

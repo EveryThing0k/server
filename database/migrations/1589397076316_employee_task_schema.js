@@ -7,22 +7,22 @@ class EmployeeTaskSchema extends Schema {
   up () {
     this.create('employee_tasks', (table) => {
       table
-        .integer("employee_physical_user_id")
+        .integer("employee_id")
         .unsigned()
-        .references("physical_user_id")
+        .references("id")
         .inTable("employees")
         .onUpdate("CASCADE")
         .onDelete("CASCADE")
         .notNullable();
       table
-        .integer("task_activity_id")
+        .integer("task_id")
         .unsigned()
-        .references("activity_id")
+        .references("id")
         .inTable("tasks")
         .onUpdate("CASCADE")
         .onDelete("CASCADE")
         .notNullable();
-      table.primary(["employee_physical_user_id", "task_activity_id"]); 
+      table.primary(["employee_id", "task_id"]); 
       table.timestamps();
     })
   }

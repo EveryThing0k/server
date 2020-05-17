@@ -7,22 +7,22 @@ class CompanyEmployeeSchema extends Schema {
   up() {
     this.create("company_employees", (table) => {
       table
-        .integer("company_legal_user_id")
+        .integer("company_id")
         .unsigned()
-        .references("legal_user_id")
+        .references("id")
         .inTable("companies")
         .onUpdate("CASCADE")
-        .onDelete("RESTRICT")
+        .onDelete("CASCADE")
         .notNullable();
       table
-        .integer("employee_physical_user_id")
+        .integer("employee_id")
         .unsigned()
-        .references("physical_user_id")
+        .references("id")
         .inTable("employees")
         .onUpdate("CASCADE")
-        .onDelete("SET NULL")
+        .onDelete("CASCADE")
         .notNullable();
-      table.primary(["company_legal_user_id", "employee_physical_user_id"]);
+      table.primary(["company_id", "employee_id"]);
       table.timestamps();
     });
   }

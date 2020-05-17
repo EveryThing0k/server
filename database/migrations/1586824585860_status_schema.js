@@ -9,9 +9,9 @@ class StatusSchema extends Schema {
       table.increments();
       table.string("name").notNullable();
       table
-      .integer("project_activity_id")
+      .integer("project_id")
       .unsigned()
-      .references("activity_id")
+      .references("id")
       .inTable("projects")
       .onUpdate("CASCADE")
       .onDelete("CASCADE")

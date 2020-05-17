@@ -7,21 +7,21 @@ class ProjectTaskSchema extends Schema {
   up() {
     this.create("project_tasks", (table) => {
       table
-        .integer("project_activity_id")
-        .references("activity_id")
+        .integer("project_id")
+        .references("id")
         .inTable("projects")
         .onUpdate("CASCADE")
         .onDelete("CASCADE")
         .notNullable();
       table
-        .integer("task_activity_id")
-        .references("activity_id")
+        .integer("task_id")
+        .references("id")
         .inTable("tasks")
         .onUpdate("CASCADE")
         .onDelete("CASCADE")
         .notNullable()
         .unique();
-        table.primary(["project_activity_id", "task_activity_id"]);
+        table.primary(["project_id", "task_id"]);
       table.timestamps();
     });
   }

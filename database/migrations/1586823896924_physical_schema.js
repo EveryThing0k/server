@@ -8,7 +8,7 @@ class PhysicalSchema extends Schema {
     this.create("physicals", (table) => {
       table.string("cpf").unique().notNullable();
       table
-        .integer("user_id")
+        .integer("id")
         .unsigned()
         .references("id")
         .inTable("users")

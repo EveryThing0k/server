@@ -8,9 +8,9 @@ class CompanySchema extends Schema {
     this.create("companies", (table) => {
       table.string("fantasy_name").notNullable();
       table
-        .integer("legal_user_id")
+        .integer("id")
         .unsigned()
-        .references("user_id")
+        .references("id")
         .inTable("legals")
         .onUpdate("CASCADE")
         .onDelete("CASCADE")
@@ -22,7 +22,7 @@ class CompanySchema extends Schema {
         .references("id")
         .inTable("addresses")
         .onUpdate("CASCADE")
-        .onDelete("RESTRICT")
+        .onDelete("CASCADE")
         .notNullable();
       table.timestamps();
     });

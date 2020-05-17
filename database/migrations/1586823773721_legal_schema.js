@@ -8,7 +8,7 @@ class LegalSchema extends Schema {
     this.create("legals", (table) => {
       table.string("cnpj").notNullable().unique();
       table
-        .integer("user_id")
+        .integer("id")
         .unsigned()
         .references("id")
         .inTable("users")

@@ -8,9 +8,9 @@ class EmployeeSchema extends Schema {
     this.create("employees", (table) => {
       table.decimal("exp").defaultTo(1).notNullable();
       table
-        .integer("physical_user_id")
+        .integer("id")
         .unsigned()
-        .references("user_id")
+        .references("id")
         .inTable("physicals")
         .onUpdate("CASCADE")
         .onDelete("CASCADE")

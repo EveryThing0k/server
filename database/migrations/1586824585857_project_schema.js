@@ -7,7 +7,7 @@ class ProjectSchema extends Schema {
   up() {
     this.create("projects", (table) => {
       table
-        .integer("activity_id")
+        .integer("id")
         .unsigned()
         .notNullable()
         .references("id")
