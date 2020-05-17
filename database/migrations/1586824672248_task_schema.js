@@ -22,8 +22,7 @@ class TaskSchema extends Schema {
         .inTable("statuses")
         .onUpdate("CASCADE")
         .onDelete("CASCADE")
-        .notNullable()
-        .unique();
+        .notNullable();
       table.integer("value").defaultTo(0).notNullable();
       table.datetime("data_end").notNullable();
       //Data entry created from command timestamps, named created_at
