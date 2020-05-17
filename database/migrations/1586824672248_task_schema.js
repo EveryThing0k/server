@@ -6,7 +6,6 @@ const Schema = use("Schema");
 class TaskSchema extends Schema {
   up() {
     this.create("tasks", (table) => {
-      table.increments();
       table
         .integer("activity_id")
         .unsigned()
@@ -15,7 +14,7 @@ class TaskSchema extends Schema {
         .onUpdate("CASCADE")
         .onDelete("CASCADE")
         .notNullable()
-        .unique();
+        .primary();
       table
         .integer("status_id")
         .unsigned()

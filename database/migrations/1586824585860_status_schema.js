@@ -11,7 +11,7 @@ class StatusSchema extends Schema {
       table
       .integer("project_activity_id")
       .unsigned()
-      .references("id")
+      .references("activity_id")
       .inTable("projects")
       .onUpdate("CASCADE")
       .onDelete("CASCADE")
