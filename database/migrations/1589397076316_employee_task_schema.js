@@ -23,6 +23,7 @@ class EmployeeTaskSchema extends Schema {
         .onUpdate("CASCADE")
         .onDelete("CASCADE")
         .notNullable();
+      table.dropPrimary();
       table.primary(["id","employee_id", "task_id"]); 
       table.timestamps();
     })
