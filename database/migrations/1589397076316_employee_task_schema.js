@@ -6,6 +6,7 @@ const Schema = use('Schema')
 class EmployeeTaskSchema extends Schema {
   up () {
     this.create('employee_tasks', (table) => {
+      table.increments("id");
       table
         .integer("employee_id")
         .unsigned()
@@ -22,7 +23,7 @@ class EmployeeTaskSchema extends Schema {
         .onUpdate("CASCADE")
         .onDelete("CASCADE")
         .notNullable();
-      table.primary(["employee_id", "task_id"]); 
+      table.primary(["id","employee_id", "task_id"]); 
       table.timestamps();
     })
   }
