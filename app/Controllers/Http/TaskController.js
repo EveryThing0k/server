@@ -5,7 +5,7 @@ const Task = use("App/Models/Task");
 const ProjectTask = use("App/Models/ProjectTask");
 const EmployeeTask = use("App/Models/EmployeeTask");
 const Status = use("App/Models/Status");
-
+const ProjectTaks = use("App/Models/ProjectTask");
 class TaskController {
   async create({ request,response}) {
     const {
@@ -23,7 +23,8 @@ class TaskController {
       "employees",
       "value"
     ]);
-    const trx = await Database.beginTransaction();
+   
+   const trx = await Database.beginTransaction();
 
    // Create Activity
    const activity = await Activity.create(
@@ -81,7 +82,7 @@ class TaskController {
     await trx.commit();
     return task;
   }
-  async show({ request }){
+  async show({ request,response }){
 
     const {task_id} = request.only([
       "task_id"
@@ -93,19 +94,59 @@ class TaskController {
     .innerJoin("employee_tasks", "employee_tasks.task_id" , "tasks.id")
     .innerJoin("statuses", "statuses.id", "status_id")
     .innerJoin("users", "users.id","employee_tasks.employee_id")
-    .select("users.name","value","data_end","tasks.created_at","statuses.name as status")    
+    .select("users.name as employee_name","users.id as employee_id","value",
+    "data_end","tasks.created_at",
+    "statuses.name as status")    
     .fetch();
-    const taskFormatted = JSON.parse(JSON.stringify(task)).reduce(
-      (accumulator, currentValue) => 
-      (
-        {
-          value: accumulator.value,
-          employees: accumulator.name+" , "+ currentValue.name,
-          data_end: accumulator.data_end,
-          data_entry: accumulator.created_at,
-          status: accumulator.status
-          }));
-    return taskFormatted;
+    
+    const taskFormatted = JSON.parse(JSON.stringify(task));
+    if(taskFormatted.length === 0){  
+      return response
+      .status(401)
+      .send({ error: "Task not found" });
+    }
+    let employees = [];
+    taskFormatted.forEach((values) => {employees.push(
+      {
+        name: values.employee_name,
+        id : values.employee_id
+      }
+    )});    
+    return {
+      employees : employees,
+      value: taskFormatted[0].value,
+      data_end: taskFormatted[0].data_end,
+      data_entry: taskFormatted[0].created_at,
+      status: taskFormatted[0].status
+    };
+  }
+  async update({request}){
+    const {task_id,status_id} = request.only([
+      "task_id", "status_id"
+    ]);
+    const trx = await Database.beginTransaction();
+    const task = await Task
+    .query(trx)
+    .where("id", task_id)
+    .update({status_id: status_id});
+    await trx.commit()
+    return task;
+  }
+
+  async index({ request }) {
+    const {project_id} = request.only([
+      "project_id"
+    ]);
+    console.log(project_id);
+    const tasks = await ProjectTaks
+    .query()
+    .where("project_tasks.project_id", project_id)
+    .innerJoin("tasks", "project_tasks.task_id" , "tasks.id")
+    .innerJoin("statuses" , "statuses.id" , "tasks.status_id")  
+    .innerJoin("activities", "tasks.id", "activities.id")
+    .select("title","description", "value","statuses.name as status")      
+    .fetch();
+    return tasks;
   }
 }
 

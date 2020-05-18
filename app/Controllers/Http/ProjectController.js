@@ -5,10 +5,20 @@ const Project = use("App/Models/Project");
 const Status = use("App/Models/Status");
 const ProjectCompany = use("App/Models/ProjectCompany");
 const CompanyEmployee = use("App/Models/CompanyEmployee");
-const ProjectTaks = use("App/Models/ProjectTask");
+
 
 
 class ProjectController {
+  async get_project(company_id){
+    const projects = await ProjectCompany
+      .query()
+      .where("company_id",company_id)
+      .innerJoin("activities", "project_companies.project_id", "activities.id")
+      .select("project_id","title", "description")      
+      .fetch(); 
+      return projects;
+  }
+
   async create({ auth, request }) {
     const company_id = auth.user.id;
 
@@ -45,13 +55,18 @@ class ProjectController {
     );
    
     //Create based status from project
-    await Status.create(
-      {
+    await Status.createMany(
+      [{
         name: "Created",
         project_id: activity.id
-      },
+      }, 
+      {
+        name: "Concluded",
+        project_id: activity.id
+      }],
       trx
     );
+    
     await trx.commit();
     return project;
   }
@@ -61,42 +76,45 @@ class ProjectController {
     
     try {
       const company = await CompanyEmployee.findByOrFail("employee_id", user_id);
-      //make a function 
-      //------------
-      const projects = await ProjectCompany
-      .query()
-      .where("company_id",company.id)
-      .innerJoin("activities", "project_companies.project_id", "activities.id")
-      .select("project_id","title", "description")      
-      .fetch(); 
-      //-------------
-      return projects;
-    } catch (err) {
-      //make a function 
-      //------------
-      const projects = await ProjectCompany
-      .query()
-      .where("company_id",user_id)
-      .innerJoin("activities", "project_companies.project_id", "activities.id")
-      .select("project_id","title", "description")      
-      .fetch(); 
-      //------------
-      return projects;
+      return await this.get_project(company.id)
+    } catch (err) {    
+      return await this.get_project(user_id);
     }
   }
-  async show({ request }) {
+
+  async show({ request,response }) {
     const {project_id} = request.only([
       "project_id"
     ]);
-    const tasks = await ProjectTaks
+    
+    const project = await Activity
     .query()
-    .where("project_tasks.project_id", project_id)
-    .innerJoin("tasks", "project_tasks.id" , "tasks.id")
-    .innerJoin("statuses" , "statuses.id" , "tasks.status_id")  
-    .innerJoin("activities", "tasks.id", "activities.id")
-    .select("title","description", "value","statuses.name as status")      
+    .where("activities.id", project_id)    
+    .innerJoin("statuses" , "statuses.project_id" , "activities.id")  
+    .select("title","description", "activities.created_at as created_at","statuses.name as status_name", "statuses.id as status_id")      
     .fetch();
-    return tasks;
+
+    const projectFormatted = JSON.parse(JSON.stringify(project));
+    if(projectFormatted.length === 0){  
+      return response
+      .status(401)
+      .send({ error: "Project not found" });
+    }
+    let statuses = [];
+    projectFormatted.forEach((values) => {statuses.push(
+      {
+        name: values.status_name,
+        id : values.status_id
+      }
+    )});
+
+
+    return {
+      title : projectFormatted[0].title,
+      description : projectFormatted[0].description,
+      data_entry: projectFormatted[0].data_entry,
+      statuses: statuses
+    };
   }
 }
 

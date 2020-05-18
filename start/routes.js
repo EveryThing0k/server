@@ -37,11 +37,19 @@ Route.group(() => {
   Route.post("/tasks", "TaskController.create").middleware(["company"]);
   //Create brid of Company and Employee
   Route.post("/companyEmployees", "CompanyEmployeeController.create").middleware(["company"]);
-  //return list of project
+  //Create status
+  Route.post("/status","StatusController.create").middleware(["company"]);
+  //Get index status
+  Route.get("/status","StatusController.index").middleware(["company"]);
+  //Return list of project
   Route.get("/projects", "ProjectController.index");
-  //return list of taks from project
+  //Return list of taks from project
   Route.get("/project", "ProjectController.show");
-  //return information of task
-  Route.get("/tasks", "TaskController.show")
+  //Return list of taks from project
+  Route.get("/tasks", "TaskController.index");
+  //Return information of task
+  Route.get("/task", "TaskController.show");
+  //Update task
+  Route.patch("/tasks", "TaskController.update");
 
 }).middleware(["auth"]);
