@@ -1,20 +1,12 @@
-"use strict";
+'use strict'
 
 /** @type {import('@adonisjs/lucid/src/Schema')} */
-const Schema = use("Schema");
+const Schema = use('Schema')
 
-class CompanyEmployeeSchema extends Schema {
-  up() {
-    this.create("company_employees", (table) => {
+class EmployeeTaskSchema extends Schema {
+  up () {
+    this.create('employee_tasks', (table) => {
       table.increments("id");
-      table
-        .integer("company_id")
-        .unsigned()
-        .references("id")
-        .inTable("companies")
-        .onUpdate("CASCADE")
-        .onDelete("CASCADE")
-        .notNullable();
       table
         .integer("employee_id")
         .unsigned()
@@ -23,15 +15,23 @@ class CompanyEmployeeSchema extends Schema {
         .onUpdate("CASCADE")
         .onDelete("CASCADE")
         .notNullable();
+      table
+        .integer("task_id")
+        .unsigned()
+        .references("id")
+        .inTable("tasks")
+        .onUpdate("CASCADE")
+        .onDelete("CASCADE")
+        .notNullable();
       table.dropPrimary();
-      table.primary(["id","company_id", "employee_id"]);
+      table.primary(["id","employee_id", "task_id"]); 
       table.timestamps();
-    });
+    })
   }
 
-  down() {
-    this.drop("company_employees");
+  down () {
+    this.drop('employee_tasks')
   }
 }
 
-module.exports = CompanyEmployeeSchema;
+module.exports = EmployeeTaskSchema

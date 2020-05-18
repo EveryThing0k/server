@@ -6,23 +6,25 @@ const Schema = use("Schema");
 class ProjectCompanySchema extends Schema {
   up() {
     this.create("project_companies", (table) => {
+      table.increments("id");
       table
-        .integer("company_legal_user_id")
+        .integer("company_id")
         .unsigned()
-        .references("legal_user_id")
+        .references("id")
         .inTable("companies")
         .onUpdate("CASCADE")
-        .onDelete("RESTRICT")
+        .onDelete("CASCADE")
         .notNullable();
       table
-        .integer("project_activity_content_id")
+        .integer("project_id")
         .unsigned()
-        .references("activity_content_id")
+        .references("id")
         .inTable("projects")
         .onUpdate("CASCADE")
-        .onDelete("SET NULL")
+        .onDelete("CASCADE")
         .notNullable();
-      table.primary(["company_legal_user_id", "project_activity_content_id"]);
+      table.dropPrimary();  
+      table.primary(["id","company_id", "project_id"]);
       table.timestamps();
     });
   }

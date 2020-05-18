@@ -6,26 +6,16 @@ const Schema = use("Schema");
 class EmployeeSchema extends Schema {
   up() {
     this.create("employees", (table) => {
-      table.increments();
-      table.integer("level").defaultTo(1);
+      table.decimal("exp").defaultTo(1).notNullable();
       table
-        .integer("physical_user_id")
+        .integer("id")
         .unsigned()
-        .references("user_id")
+        .references("id")
         .inTable("physicals")
         .onUpdate("CASCADE")
         .onDelete("CASCADE")
         .notNullable()
-        .unique();
-      table
-        .integer("position_id")
-        .unsigned()
-        .references("id")
-        .inTable("positions")
-        .onUpdate("CASCADE")
-        .onDelete("CASCADE")
-        .notNullable()
-        .defaultTo(1);
+        .primary();     
       table.timestamps();
     });
   }

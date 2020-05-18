@@ -6,17 +6,16 @@ const Schema = use("Schema");
 class PhysicalSchema extends Schema {
   up() {
     this.create("physicals", (table) => {
-      table.increments();
-      table.string("cpf");
+      table.string("cpf").unique().notNullable();
       table
-        .integer("user_id")
+        .integer("id")
         .unsigned()
         .references("id")
         .inTable("users")
         .onUpdate("CASCADE")
         .onDelete("CASCADE")
         .notNullable()
-        .unique();
+        .primary();
       table.timestamps();
     });
   }

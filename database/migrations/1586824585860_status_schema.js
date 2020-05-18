@@ -8,6 +8,15 @@ class StatusSchema extends Schema {
     this.create("statuses", (table) => {
       table.increments();
       table.string("name").notNullable();
+      table
+      .integer("project_id")
+      .unsigned()
+      .references("id")
+      .inTable("projects")
+      .onUpdate("CASCADE")
+      .onDelete("CASCADE")
+      .notNullable()
+      .unique();
       table.timestamps();
     });
   }

@@ -35,7 +35,7 @@ class UserCNPJController {
     const user = await User.create({ name, email, password }, trx);
 
     // Create Legal
-    await Legal.create({ cnpj, user_id: user.id }, trx);
+    await Legal.create({ cnpj, id: user.id }, trx);
 
     // Create Address
     const { neighborhood, number, street, city, state, cep } = address;
@@ -55,7 +55,7 @@ class UserCNPJController {
     const company = await Company.create(
       {
         fantasy_name,
-        legal_user_id: user.id,
+        id: user.id,
         address_id: companyAddress.id,
       },
       trx

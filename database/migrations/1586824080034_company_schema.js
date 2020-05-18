@@ -6,24 +6,23 @@ const Schema = use("Schema");
 class CompanySchema extends Schema {
   up() {
     this.create("companies", (table) => {
-      table.increments();
-      table.string("fantasy_name");
+      table.string("fantasy_name").notNullable();
       table
-        .integer("legal_user_id")
+        .integer("id")
         .unsigned()
-        .references("user_id")
+        .references("id")
         .inTable("legals")
         .onUpdate("CASCADE")
         .onDelete("CASCADE")
         .notNullable()
-        .unique();
+        .primary();
       table
         .integer("address_id")
         .unsigned()
         .references("id")
         .inTable("addresses")
         .onUpdate("CASCADE")
-        .onDelete("RESTRICT")
+        .onDelete("CASCADE")
         .notNullable();
       table.timestamps();
     });

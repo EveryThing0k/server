@@ -6,32 +6,26 @@ const Schema = use("Schema");
 class TaskSchema extends Schema {
   up() {
     this.create("tasks", (table) => {
-      table.increments();
       table
-        .integer("activity_content_id")
+        .integer("id")
         .unsigned()
-        .references("content_id")
+        .references("id")
         .inTable("activities")
         .onUpdate("CASCADE")
         .onDelete("CASCADE")
         .notNullable()
-        .unique();
+        .primary();
       table
-        .integer("type_id")
+        .integer("status_id")
         .unsigned()
         .references("id")
-        .inTable("types")
+        .inTable("statuses")
         .onUpdate("CASCADE")
         .onDelete("CASCADE")
         .notNullable();
-      table
-        .integer("score_content_id")
-        .unsigned()
-        .references("content_id")
-        .inTable("scores")
-        .onUpdate("CASCADE")
-        .onDelete("CASCADE")
-        .notNullable();
+      table.integer("value").defaultTo(0).notNullable();
+      table.datetime("data_end").notNullable();
+      //Data entry created from command timestamps, named created_at
       table.timestamps();
     });
   }

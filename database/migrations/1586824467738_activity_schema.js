@@ -8,24 +8,7 @@ class ActivitySchema extends Schema {
     this.create("activities", (table) => {
       table.increments();
       table.string("title").notNullable();
-      table.datetime("data_end");
-      table
-        .integer("content_id")
-        .unsigned()
-        .references("id")
-        .inTable("contents")
-        .onUpdate("CASCADE")
-        .onDelete("CASCADE")
-        .notNullable()
-        .unique();
-      table
-        .integer("status_id")
-        .unsigned()
-        .references("id")
-        .inTable("statuses")
-        .onUpdate("CASCADE")
-        .onDelete("CASCADE")
-        .notNullable();
+      table.string("description").notNullable();
       table.timestamps();
     });
   }
