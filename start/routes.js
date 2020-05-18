@@ -51,5 +51,9 @@ Route.group(() => {
   Route.get("/task", "TaskController.show");
   //Update task
   Route.patch("/tasks", "TaskController.update");
+  //Update users
+  Route.patch("/users","UserController.update");
+  //Show user
+  Route.get("/users","UserController.show");
 
 }).middleware(["auth"]);
