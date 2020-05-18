@@ -12,6 +12,7 @@ class UserCPFController {
       "password",
       "cpf",
     ]);
+    
     const trx = await Database.beginTransaction();
 
     // Check if the email already exists
@@ -21,10 +22,9 @@ class UserCPFController {
     if (userExists) {
       return response.status(401).send({ error: "E-mail already exists" });
     }
-
+    
     const user = await User.create({ name, email, password }, trx);
 
-   console.log(user.id );
     // Create Physical
     await Physical.create({ cpf, id: user.id }, trx);
 

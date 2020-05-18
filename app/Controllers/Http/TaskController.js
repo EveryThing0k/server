@@ -125,19 +125,17 @@ class TaskController {
       "task_id", "status_id"
     ]);
     const trx = await Database.beginTransaction();
-    const task = await Task
-    .query(trx)
-    .where("id", task_id)
-    .update({status_id: status_id});
+    const task = await Task.findByOrFail("id", task_id)
+    task.status_id = status_id;
+    const save = await task.save(trx);           
     await trx.commit()
-    return task;
+    return save;    
   }
 
   async index({ request }) {
     const {project_id} = request.only([
       "project_id"
     ]);
-    console.log(project_id);
     const tasks = await ProjectTaks
     .query()
     .where("project_tasks.project_id", project_id)

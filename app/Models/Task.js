@@ -4,6 +4,10 @@
 const Model = use('Model')
 
 class Task extends Model {
+    static boot() {
+        super.boot();   
+    
+        this.addHook("afterUpdate","TaskHook.change_level");
+    }
 }
-
 module.exports = Task
