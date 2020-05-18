@@ -4,7 +4,7 @@ const CompanyModel = use("App/Models/Company");
 class Company {
   async handle({ auth, response }, next) {
     try {
-      await CompanyModel.findByOrFail("legal_user_id", auth.user.id);
+      await CompanyModel.findByOrFail("id", auth.user.id);
       await next();
     } catch (err) {
       console.log(err);

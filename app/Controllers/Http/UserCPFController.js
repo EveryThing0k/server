@@ -2,7 +2,6 @@
 const User = use("App/Models/User");
 const Physical = use("App/Models/Physical");
 const Employee = use("App/Models/Employee");
-const Position = use("App/Models/Position");
 const Database = use("Database");
 
 class UserCPFController {
@@ -25,21 +24,14 @@ class UserCPFController {
 
     const user = await User.create({ name, email, password }, trx);
 
-    // Check if the position default already created
-    const positionExists = await Position.first();
-    if (positionExists.access_level != 0) {
-      return response
-        .status(500)
-        .send({ error: "Position default not created" });
-    }
-
+   console.log(user.id );
     // Create Physical
-    await Physical.create({ cpf, user_id: user.id }, trx);
+    await Physical.create({ cpf, id: user.id }, trx);
 
     /// Create Employee
     await Employee.create(
       {
-        physical_user_id: user.id,
+        id: user.id,
       },
       trx
     );
