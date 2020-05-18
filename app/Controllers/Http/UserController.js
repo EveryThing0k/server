@@ -4,35 +4,32 @@ const Employee = use("App/Models/Employee");
 const Database = use("Database");
 class UserController {
     async update({auth,request, response}){
-        const user_id =  auth.user.id;
+        const user =  auth.user;
         const {name, email, password} = request.only([
             "name","email", "password"]);
         const trx = await Database.beginTransaction();
-
-        if(name != undefined){
-            const user = await User.findByOrFail("id", user_id);      
+         
+        if(name){
             user.name = name;
-            const save = await user.save(trx);  
-            await trx.commit();
-            return save;
-
-        }else if(email != undefined){
-            const user = await User.findByOrFail("id", user_id);      
+        }else if(email){
+            const userExists = await User.findBy("email", email);
+            if(userExists){
+                return response
+                .status(401)
+                .send({ error: "Email already in dataBase" });
+            }
             user.email = email;
-            const save = await user.save(trx);  
-            await trx.commit();
-            return save;
-
-        }else if(password != undefined){
-            const user = await User.findByOrFail("id", user_id);         
+        }else if(password){
             user.password = password;
-            const save = await user.save(trx);           
-            await trx.commit()
-            return save;
+        }else{
+            return response
+            .status(401)
+            .send({ error: "Type pass not found" });
         }
-        return response
-        .status(401)
-        .send({ error: "Error" });
+        const save = await user.save(trx);  
+        await trx.commit();
+        return save;
+       
     } 
     async show({auth}){
         const user = auth.user;
