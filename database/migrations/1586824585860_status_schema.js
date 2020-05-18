@@ -16,7 +16,7 @@ class StatusSchema extends Schema {
       .onUpdate("CASCADE")
       .onDelete("CASCADE")
       .notNullable()
-      .unique();
+      
       table.timestamps();
     });
   }
