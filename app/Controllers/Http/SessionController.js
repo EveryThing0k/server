@@ -1,4 +1,5 @@
 const User = use("App/Models/User");
+const Legal = use("App/Models/Legal");
 
 class SessionController {
   async create({ request, response, auth }) {
@@ -11,9 +12,17 @@ class SessionController {
       .select(["id", "name", "email"])
       .first();
 
+    let type = "employee";
+
+    const legalExists = await Legal.findBy("id", user.id);
+
+    if (legalExists) {
+      type = "company";
+    }
+
     return response.send({
       token: token.token,
-      user,
+      user: { ...user.$attributes, type },
     });
   }
 }

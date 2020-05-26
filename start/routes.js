@@ -28,7 +28,6 @@ Route.post("/users/cnpj", "UserCNPJController.create");
 //Creata an session
 Route.post("/sessions", "SessionController.create");
 
-
 // With auth
 Route.group(() => {
   //Create Project
@@ -36,24 +35,26 @@ Route.group(() => {
   //Create task
   Route.post("/tasks", "TaskController.create").middleware(["company"]);
   //Create brid of Company and Employee
-  Route.post("/companyEmployees", "CompanyEmployeeController.create").middleware(["company"]);
+  Route.post(
+    "/companyEmployees",
+    "CompanyEmployeeController.create"
+  ).middleware(["company"]);
   //Create status
-  Route.post("/status","StatusController.create").middleware(["company"]);
+  Route.post("/status", "StatusController.create").middleware(["company"]);
   //Get index status
-  Route.get("/status","StatusController.index").middleware(["company"]);
+  Route.get("/status", "StatusController.index").middleware(["company"]);
   //Return list of project
   Route.get("/projects", "ProjectController.index");
   //Return list of taks from project
   Route.get("/project", "ProjectController.show");
   //Return list of taks from project
-  Route.get("/tasks", "TaskController.index");
+  Route.get("/tasks/:id", "TaskController.index");
   //Return information of task
   Route.get("/task", "TaskController.show");
   //Update task
   Route.patch("/tasks", "TaskController.update");
   //Update users
-  Route.patch("/users","UserController.update");
+  Route.patch("/users", "UserController.update");
   //Show user
-  Route.get("/users","UserController.show");
-
+  Route.get("/users", "UserController.show");
 }).middleware(["auth"]);
