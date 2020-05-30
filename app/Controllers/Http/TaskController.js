@@ -14,14 +14,14 @@ class TaskController {
       data_end,
       project_id,
       employees,
-      value
+      value,
     } = request.only([
       "description",
       "title",
       "data_end",
       "project_id",
       "employees",
-      "value"
+      "value",
     ]);
 
     const trx = await Database.beginTransaction();
@@ -40,9 +40,7 @@ class TaskController {
       status = await Status.findByOrFail("project_id", project_id);
     } catch (err) {
       console.log(err);
-      return response
-        .status(401)
-        .send({ error: "Project not Found" });
+      return response.status(401).send({ error: "Project not Found" });
     }
 
     // Create Task
@@ -51,7 +49,7 @@ class TaskController {
         id: activity.id,
         status_id: status.id,
         value,
-        data_end
+        data_end,
       },
       trx
     );
@@ -65,7 +63,7 @@ class TaskController {
       trx
     );
 
-    // Formatted  Employees 
+    // Formatted  Employees
     const employeesFormatted = employees.map((employee) => ({
       employee_id: employee,
       task_id: task.id,
@@ -75,44 +73,40 @@ class TaskController {
       await EmployeeTask.createMany(employeesFormatted, trx);
     } catch (err) {
       console.log(err);
-      return response
-        .status(401)
-        .send({ error: "Employee not Found" });
+      return response.status(401).send({ error: "Employee not Found" });
     }
     await trx.commit();
     return task;
   }
   async show({ request, response }) {
+    const { task_id } = request.only(["task_id"]);
 
-    const { task_id } = request.only([
-      "task_id"
-    ]);
-
-    const task = await Task
-      .query()
+    const task = await Task.query()
       .where("tasks.id", task_id)
       .innerJoin("employee_tasks", "employee_tasks.task_id", "tasks.id")
       .innerJoin("statuses", "statuses.id", "status_id")
       .innerJoin("users", "users.id", "employee_tasks.employee_id")
-      .select("users.name as employee_name", "users.id as employee_id", "value",
-        "data_end", "tasks.created_at",
-        "statuses.name as status", "tasks.id as task_id")
+      .select(
+        "users.name as employee_name",
+        "users.id as employee_id",
+        "value",
+        "data_end",
+        "tasks.created_at",
+        "statuses.name as status",
+        "tasks.id as task_id"
+      )
       .fetch();
 
     const taskFormatted = JSON.parse(JSON.stringify(task));
     if (taskFormatted.length === 0) {
-      return response
-        .status(401)
-        .send({ error: "Task not found" });
+      return response.status(401).send({ error: "Task not found" });
     }
     let employees = [];
     taskFormatted.forEach((values) => {
-      employees.push(
-        {
-          name: values.employee_name,
-          id: values.employee_id
-        }
-      )
+      employees.push({
+        name: values.employee_name,
+        id: values.employee_id,
+      });
     });
     return {
       id: taskFormatted[0].task_id,
@@ -124,48 +118,57 @@ class TaskController {
     };
   }
   async update({ request }) {
-    const { task_id, status_id } = request.only([
-      "task_id", "status_id"
-    ]);
+    const { task_id, status_id } = request.only(["task_id", "status_id"]);
     const trx = await Database.beginTransaction();
-    const task = await Task.findByOrFail("id", task_id)
+    const task = await Task.findByOrFail("id", task_id);
     task.status_id = status_id;
     const save = await task.save(trx);
-    await trx.commit()
+    await trx.commit();
     return save;
   }
 
   async index({ request }) {
-    const { project_id } = request.only([
-      "project_id"
-    ]);
-    const tasks = await ProjectTaks
-      .query()
-      .where("project_tasks.project_id", project_id)
+    const { id } = request.params;
+    const tasks = await ProjectTaks.query()
+      .where("project_tasks.project_id", id)
       .innerJoin("tasks", "project_tasks.task_id", "tasks.id")
       .innerJoin("statuses", "statuses.id", "tasks.status_id")
       .innerJoin("activities", "tasks.id", "activities.id")
-      .select("title", "description", "value", "statuses.name as status")
+      .select(
+        "task_id as id",
+        "title",
+        "description as content",
+        "value",
+        "statuses.name as status"
+      )
       .fetch();
-    return tasks;
+
+    const statuses = await Status.query()
+      .where("project_id", id)
+      .select("id", "name")
+      .fetch();
+
+    const data = statuses.rows.map((status) => ({
+      id: status.$attributes.id,
+      title: status.$attributes.name,
+      cards: tasks.rows.filter(
+        (task) => status.$attributes.name === task.$attributes.status
+      ),
+    }));
+
+    return data;
   }
-  async delete({ request,response }) {
 
-    const trx = await Database.beginTransaction();
-
-    const { task_id } = request.only([
-      "task_id"
-    ]);
-   
-    try{
-      const task = await Task.findByOrFail("id", task_id);
+  async delete({ request, response }) {
+    try {
+      const trx = await Database.beginTransaction();
+      const { id } = request.params;
+      const task = await Task.findByOrFail("id", id);
       await task.delete(trx);
       await trx.commit();
-      return true;
-    }catch(err){      
-      return response
-      .status(401)
-      .send({ error: "Task not found" });
+      return response.status(200).send();
+    } catch (err) {
+      return response.status(401).send({ error: "Task not found" });
     }
   }
 }

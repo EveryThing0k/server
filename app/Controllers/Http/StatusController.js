@@ -24,6 +24,16 @@ class StatusController {
       .fetch();
     return statuses;
   }
+  async delete({ request, response }) {
+    try {
+      const { id } = request.params;
+      const status = await Status.findByOrFail("id", id);
+      await status.delete();
+      return response.status(200).send();
+    } catch (err) {
+      return response.status(404).send({ error: "Project don't exists" });
+    }
+  }
 }
 
 module.exports = StatusController;
