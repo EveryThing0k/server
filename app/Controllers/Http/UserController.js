@@ -2,6 +2,8 @@
 const User = use("App/Models/User");
 const Employee = use("App/Models/Employee");
 const Database = use("Database");
+const Company = use("App/Models/Company");
+
 class UserController {
   async update({ auth, request, response }) {
     const user = auth.user;
@@ -56,7 +58,14 @@ class UserController {
 
       return userFormatted;
     } catch (err) {
-      userFormatted["type"] = "company";
+      const response = await Company.findBy("id", user.id);
+
+      if (response && response.$attributes) {
+        userFormatted["type"] = "company";
+        return userFormatted;
+      }
+
+      userFormatted["type"] = "registered";
       return userFormatted;
     }
   }

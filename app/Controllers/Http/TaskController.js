@@ -6,6 +6,9 @@ const ProjectTask = use("App/Models/ProjectTask");
 const EmployeeTask = use("App/Models/EmployeeTask");
 const Status = use("App/Models/Status");
 const ProjectTaks = use("App/Models/ProjectTask");
+const User = use("App/Models/User");
+const Employee = use("App/Models/Employee");
+
 class TaskController {
   async create({ request, response }) {
     const {
@@ -163,11 +166,21 @@ class TaskController {
     try {
       const trx = await Database.beginTransaction();
       const { id } = request.params;
+      const emails = request.input("emails");
+
       const task = await Task.findByOrFail("id", id);
       await task.delete(trx);
+
+      const employees_id = await User.query()
+        .whereIn("email", emails)
+        .pluck("id");
+
+      await Employee.query().whereIn("id", employees_id).increment("exp", 0.5);
+
       await trx.commit();
       return response.status(200).send();
     } catch (err) {
+      console.log(err);
       return response.status(401).send({ error: "Task not found" });
     }
   }

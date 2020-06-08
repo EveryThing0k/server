@@ -36,8 +36,16 @@ Route.group(() => {
   Route.post("/tasks", "TaskController.create").middleware(["company"]);
   //Create brid of Company and Employee
   Route.post(
-    "/companyEmployees",
+    "/company_employees",
     "CompanyEmployeeController.create"
+  ).middleware(["company"]);
+  Route.get(
+    "/company_employees",
+    "CompanyEmployeeController.index"
+  ).middleware(["company"]);
+  Route.delete(
+    "/company_employees/:email",
+    "CompanyEmployeeController.delete"
   ).middleware(["company"]);
   //Create status
   Route.post("/statuses", "StatusController.create").middleware(["company"]);
@@ -48,15 +56,15 @@ Route.group(() => {
   //Return list of taks from project
   Route.get("/project", "ProjectController.show");
   //Return list of taks from project
-  Route.get("/tasks/:id", "TaskController.index");
+  Route.get("/tasks/:id", "TaskController.index").middleware(["company"]);
   //Return information of task
   Route.get("/task", "TaskController.show");
   //Update task
-  Route.patch("/task", "TaskController.update");
+  Route.put("/tasks/:id", "TaskController.delete");
   //Update users
   Route.put("/users", "UserController.update");
   //Show user
-  Route.get("/users", "UserController.show");
+  Route.get("/user", "UserController.show");
   //Delete Task
   Route.delete("/tasks/:id", "TaskController.delete").middleware(["company"]);
   //Delete Project
@@ -66,4 +74,6 @@ Route.group(() => {
   Route.delete("/statuses/:id", "StatusController.delete").middleware([
     "company",
   ]);
+  //Create company based of user employee
+  Route.post("/company", "CompanyController.create");
 }).middleware(["auth"]);

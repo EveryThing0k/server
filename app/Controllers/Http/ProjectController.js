@@ -5,8 +5,6 @@ const Project = use("App/Models/Project");
 const Status = use("App/Models/Status");
 const ProjectCompany = use("App/Models/ProjectCompany");
 const CompanyEmployee = use("App/Models/CompanyEmployee");
-const ProjectTask = use("App/Models/ProjectTask");
-const Task = use("App/Models/Task");
 
 class ProjectController {
   async get_project(company_id) {
@@ -77,7 +75,7 @@ class ProjectController {
         "employee_id",
         user_id
       );
-      return await this.get_project(company.id);
+      return await this.get_project(company.company_id);
     } catch (err) {
       return await this.get_project(user_id);
     }
